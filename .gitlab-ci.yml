@@ -9,8 +9,17 @@
 image: golang:latest
 
 stages:
-  - test
   - build
+  - test
+
+build:
+  stage: build
+  script:
+    - mkdir -p go-passgen
+    - go build -o go-passgen ./...
+  artifacts:
+    paths:
+      - go-passgen
 
 vet:
   stage: test
@@ -21,12 +30,3 @@ test:
   stage: test
   script:
     - go test -race $(go list ./... | grep -v /vendor/)
-
-build:
-  stage: build
-  script:
-    - mkdir -p go-passgen
-    - go build -o go-passgen ./...
-  artifacts:
-    paths:
-      - go-passgen
